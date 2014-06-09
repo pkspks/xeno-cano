@@ -1,5 +1,6 @@
 class Recording
   include Logging
+  include DownloadProgress
 
   def initialize(data)
     @data = data
@@ -37,8 +38,7 @@ class Recording
 
   def actually_download(file_path)
     info { "Downloading #{file_path}" }
-    progress_proc = proc { |size| debug { "#{file_path} #{'%.2f%%' % ((size/content_length.to_f) * 100)}" } }
-    open(download_url, progress_proc: progress_proc) do |r|
+    open(download_url, progress_proc: progress_proc(file_path)) do |r|
       FileUtils.mkdir_p(File.dirname(file_path))
       open(file_path, 'w+') do |f|
         f.write(r.read)
@@ -47,9 +47,12 @@ class Recording
   end
 
   def load_meta(file_path)
-    get_content_length_and_download_url unless File.exists?(file_path)
+    if File.exists?(file_path)
+      @data = load_meta_from_file(file_path)
+      return
+    end
 
-    @data = load_meta_from_file(file_path)
+    get_content_length_and_download_url
   end
 
   def get_content_length_and_download_url
@@ -66,7 +69,6 @@ class Recording
   end
 
   def load_meta_from_file(file_path)
-    return @data unless File.exists?(file_path)
     meta_content = File.open(file_path, 'r:UTF-8') { |f| f.read }
     JSON.parse(meta_content).merge(@data)
   end
