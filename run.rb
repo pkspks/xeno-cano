@@ -9,7 +9,7 @@ require 'open-uri'
 
 XenoCanto.site= 'www.xeno-canto.org'
 
-# Logging::LOG_LEVEL[:debug] = false
+# Logging::LOG_LEVEL[:debug] = true
 recordings_page = RecordingsPage.new(1, ARGV[0] || 'india')
 
 recordings_page.download

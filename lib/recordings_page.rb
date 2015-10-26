@@ -38,8 +38,12 @@ class RecordingsPage
   end
 
   def fetch_data
-    response = open("http://#{XenoCanto.site}/api/2/recordings?query=cnt:#{@country}&page=#{@index}").read
-    JSON.parse(response)
+    debug { "Downloading from #{url}" }
+    JSON.parse(open(url).read)
+  end
+
+  def url
+    "http://#{XenoCanto.site}/api/2/recordings?query=cnt:#{@country}&page=#{@index}"
   end
 
   def recordings_in_groups
