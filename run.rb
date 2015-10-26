@@ -9,9 +9,8 @@ require 'open-uri'
 
 XenoCanto.site= 'www.xeno-canto.org'
 
-
 # Logging::LOG_LEVEL[:debug] = false
-recordings_page = RecordingsPage.new(1)
+recordings_page = RecordingsPage.new(1, ARGV[0] || 'india')
 
 recordings_page.download
 while recordings_page.next_page?

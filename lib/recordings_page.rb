@@ -2,8 +2,9 @@ class RecordingsPage
   include Logging
   NUMBER_OF_SIMULTANEOUS_DOWNLOADS = 5
 
-  def initialize(index = 1)
+  def initialize(index = 1, country)
     @index = index
+    @country = country
   end
 
   def download
@@ -24,7 +25,7 @@ class RecordingsPage
   end
 
   def next_page
-    RecordingsPage.new(@index + 1)
+    RecordingsPage.new(@index + 1, @country)
   end
 
   private
@@ -37,7 +38,7 @@ class RecordingsPage
   end
 
   def fetch_data
-    response = open("http://#{XenoCanto.site}/api/2/recordings?query=cnt:india&page=#{@index}").read
+    response = open("http://#{XenoCanto.site}/api/2/recordings?query=cnt:#{@country}&page=#{@index}").read
     JSON.parse(response)
   end
 
