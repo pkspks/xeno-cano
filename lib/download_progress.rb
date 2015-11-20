@@ -6,7 +6,7 @@ module DownloadProgress
         progress_for_dec = ((percentage_completed) / 10).to_i
         next nil unless progress_shown[progress_for_dec].nil?
 
-        @progress_shown[progress_for_dec] = percentage_completed
+        progress_shown[progress_for_dec] = percentage_completed
         "#{file_path} #{'%.2f%%' % (percentage_completed)}"
       end
     end
